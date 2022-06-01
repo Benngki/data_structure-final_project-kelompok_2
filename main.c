@@ -250,23 +250,18 @@ void cariRuteTerpendek(int jum_node, int awal, int *rute, int *jarak, int *temp,
     printf("\n");
 }
 
-int main()
-{
-    int jum_node,awal;
-
-    // cetak header
-    header();
-
+int* buatGraph(int *jum_node) {
+    int *G;
+    
+    // input user untuk jumlah node
     printf("\n Masukan jumlah node : ");
-    scanf("%d",&jum_node);
-    // int G[jum_node][jum_node],tempGraf[jum_node][jum_node],jarak[jum_node],visit[jum_node],temp[jum_node],count;
-    int *G,tempGraf[jum_node][jum_node],jarak[jum_node],visit[jum_node],temp[jum_node],count;
-    G = (int*) malloc(jum_node*jum_node*sizeof(int));
+    scanf("%d",jum_node);
+    G = (int*) malloc((*jum_node)*(*jum_node)*sizeof(int));
 
     printf(" Masukkan jarak antar node :\n");
     printf("   Note! Jika tidak ada jarak masukkan 0!\n");
-    for (int i = 0; i < jum_node; i++){
-        for (int j = 0; j < jum_node; j++){
+    for (int i = 0; i < (*jum_node); i++){
+        for (int j = 0; j < (*jum_node); j++){
             // opsi 1
             // if (i == j) G[i][j] = 0;
 
@@ -277,15 +272,52 @@ int main()
             //     continue;
             // }
 
-            if (j == i) *(G + jum_node*i + j) = 0;
-            else if (j < i) *(G + jum_node*i + j) = *(G + jum_node*j + i);
+            if (j == i) *(G + (*jum_node)*i + j) = 0;
+            else if (j < i) *(G + (*jum_node)*i + j) = *(G + (*jum_node)*j + i);
             else {
                 printf("   %d -> %d = ", i+1, j+1);
-                scanf("%d", (G + jum_node*i + j));
-                if (j == jum_node-1) printf(" ------------------------------------------------\n");
+                scanf("%d", (G + (*jum_node)*i + j));
+                if (j == (*jum_node)-1) printf(" ------------------------------------------------\n");
             }
         }        
     }
+
+    return G;
+}
+
+void menu(){
+
+    int jum_node,awal;
+    int *G, tempGraf[jum_node][jum_node],jarak[jum_node],visit[jum_node],temp[jum_node],count;
+
+    char list_menu_utama[][20] = {"Buat graph", "Cari rute terpendek", "Tambah data", "Update"};
+    int pilihan;
+    
+    // cetak header
+    header();
+
+    teksTengah(" Menu Utama ", '=', 62, "biasa", 1);
+    for (int i = 0; i < sizeof(list_menu_utama)/sizeof(char)/20; i++){
+        printf("-> %d. %s\n", i+1, list_menu_utama[i]);
+    }
+    printf("-> Masukkan pilihan anda [1-%d]: ", sizeof(list_menu_utama)/sizeof(char)/20);
+    scanf("%d", &pilihan);
+    switch (pilihan)
+    {
+    case 1:
+        break;
+    
+    default:
+        break;
+    }
+    // 1. Buat graf
+    // 2. update data 
+    // 2. delete data
+    // 3. add data
+    // 4. lihat data
+
+    // buat graph
+    G = (int*) buatGraph(&jum_node);
 
     tampilkanGraph(G, jum_node);
     
@@ -362,6 +394,14 @@ int main()
     
     // cetak footer
     footer(jarak[jum_node-1], rute, panjang_rute); 
+
+}
+
+int main()
+{
+
+    // panggil fungsi menu
+    menu();
 
     return 0;
 }
