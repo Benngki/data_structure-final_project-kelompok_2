@@ -58,20 +58,6 @@ void teksTengah(char *judul, char token, float len, char* mode, int new_line){
     }
     else{
         int len_baru = (int) (len - strlen(judul)) / 2, len_baru2;
-        // int len_baru = (int) round((len - strlen(judul) - 1) / 2);
-        // for (int j = 0; j < len_baru; j++)
-        // {
-        //     printf("%c", token);
-        // }
-        // printf("%s", judul);
-        // while ((len_baru*2)+strlen(judul) < len) {
-        //     len_baru++;
-        // }
-        // for (int k = 0; k < len_baru; k++)
-        // {
-        //     printf("%c", token);
-        // }
-        // printf("[%d]", len_baru);
         if ((int) (len - strlen(judul)) % 2 != 0) {
             len_baru2 = len_baru;
             len_baru += (int) (len - strlen(judul)) % 2;
@@ -218,10 +204,10 @@ void cariRuteTerpendek(int* G, int jum_node, int awal){
     scanf ("%d",&awal);
     awal--;
 
-    int akhir;
-    printf("   Masukan node akhir : ");
-    scanf ("%d",&akhir);
-    akhir--;
+    // int akhir;
+    // printf("   Masukan node akhir : ");
+    // scanf ("%d",&akhir);
+    // akhir--;
 
     for(int i=0;i<jum_node;i++)
     {
@@ -383,35 +369,24 @@ void ubahData(int *G, int jum_node){
 int* tambahData(int *G, int *jum_node){
     int jum_node_baru, *G_baru;
 
-    // temp_graph = (int*) malloc(temp_count*sizeof(int));
-
+    // input user
     printf("   Masukkan jumlah data : ");
     scanf("%d", &jum_node_baru);
-
-    // tampilkanGraph(G, *jum_node);
-
     jum_node_baru += *jum_node;
-    
-    // tampilkanGraph(G, *jum_node);
 
-    G_baru = (int*) malloc(jum_node_baru*jum_node_baru*sizeof(int));
-    // realloc(G, (*jum_node)*(*jum_node)*sizeof(int));
-    
-    // tampilkanGraph(G_baru, jum_node_baru);
-    
+    G_baru = (int*) malloc(jum_node_baru*jum_node_baru*sizeof(int)); // alokasi memori untuk G_baru
 
+    // memberikan nilai -1 untuk setiap node pada G_baru
     for (int i = 0; i < jum_node_baru; i++){
         for (int j = 0; j < jum_node_baru; j++){
             *(G_baru + (jum_node_baru)*i + j) = -1;
-            // *(G_baru + j) = -1;
         }
     }
 
-    // tampilkanGraph(G_baru, jum_node_baru);
-
+    // memindahkan graph lama ke graph baru
+    //  kemudian meminta input user jika ada node yang belum ada nilainya
     for (int i = 0; i < jum_node_baru; i++){
         for (int j = 0; j < jum_node_baru; j++){
-            // printf("{test}");
             if (j < *jum_node && i < *jum_node) *(G_baru + jum_node_baru*i + j) = *(G + (*jum_node)*i + j);
             else if (j < i) *(G_baru + jum_node_baru*i + j) = *(G_baru + jum_node_baru*j + i);
             else if (i == j) *(G_baru + jum_node_baru*i + j) = 0;
@@ -421,53 +396,37 @@ int* tambahData(int *G, int *jum_node){
                 if (j == jum_node_baru-1) teksTengah("", '-', 62, "biasa", 1);
             }
         }
-            // if (j == (*jum_node)-1) teksTengah("", '-', 62, "biasa", 1);
     }
-
-    // for (int i = 0; i < *jum_node; i++){
-    //     for (int j = 0; j < *jum_node; j++){
-    //         *(G_baru + (jum_node_baru)*i + j) = *(G + (*jum_node)*i + j);
-    //     }
-    // }
-
-    tampilkanGraph(G, *jum_node);
-    tampilkanGraph(G_baru, jum_node_baru);
-    free(G);
-
-
+    
+    // mengupdate data graph lama dan jumlah node
+    free(G); // menghapus G dari memori
     G = G_baru;
     *jum_node = jum_node_baru;
 
-    // free(G);
-
+    // menampilkan info bahwa data berhasil ditambahkan
     teksTengah(" Berhasil menambahkan data! ", '-', 62, "biasa", 1);
 
-    tampilkanGraph(G, *jum_node);
-
     return G;
-
-    // ubahData(G, *jum_node);
-
-
-    // tempGraph = (int*) malloc(sizeof)
 }
 
 int* hapusData(int *G, int *jum_node){
     // deklarasi variabel
     int lokasi_data, *G_baru, jum_node_baru;
+
     // menampilkan graph sekarang
     tampilkanGraph(G, *jum_node);
+
     // input user
     printf("   Data yang ingin dihapus [X/Y]: ");
     scanf("%d", &lokasi_data);
     lokasi_data--; // ubah inputan menjadi index
-    // mengapus data
-    jum_node_baru = *jum_node - 1;
-    G_baru = (int*) malloc(jum_node_baru*jum_node_baru*sizeof(int));
+
+    // proses menghapus data
+    jum_node_baru = *jum_node - 1; // inisialisasi jumlah node baru
+    G_baru = (int*) malloc(jum_node_baru*jum_node_baru*sizeof(int)); // alokasi memori untuk variabel G_baru
     for (int i = 0, k = 0; i < *jum_node; i++){
         if (i == lokasi_data) continue;
         for (int j = 0, l = 0; j < *jum_node; j++){
-            // if ((i == lokasi_data[0] && j == lokasi_data[1]) || (j == lokasi_data[0] && i == lokasi_data[1])) continue;
             if (j == lokasi_data) continue;
             else{
                 *(G_baru + jum_node_baru*k + l) = *(G + (*jum_node)*i + j);
@@ -476,7 +435,9 @@ int* hapusData(int *G, int *jum_node){
         }
         k++;
     }
-    *jum_node = jum_node_baru;
+    *jum_node = jum_node_baru; // mengupdate jumlah node
+
+    // menampilkan informasi bahwa data berhasil dihapus
     teksTengah(" Berhasil menghapus data! ", '-', 62, "biasa", 1);
 
     return G_baru;
@@ -484,22 +445,18 @@ int* hapusData(int *G, int *jum_node){
 
 void menu(){
 
-    int jum_node,awal;
-    int *G = NULL;
-
+    int jum_node, awal, *G = NULL, pilihan;
     char list_menu_utama[][20] = {"Buat graph", "Cari rute terpendek", "Tampilkan graph", "Tambah data", "Hapus data", "Ubah data"}, lagi, inp_hapus_graph;
-    int pilihan;
     
     do{
-        // back_menu:
+        // menampilkan tampilan menu
         system("cls");
-        // cetak header
-        header();
-
+        header(); // cetak header
         teksTengah(" Menu Utama ", '=', 62, "biasa", 1);
         for (int i = 0; i < sizeof(list_menu_utama)/sizeof(char)/20; i++){
             printf("-> %d. %s\n", i+1, list_menu_utama[i]);
         }
+        //  meminta input user terkait menu yang ingin diakses
         printf("-? Masukkan pilihan anda [1-%d]: ", sizeof(list_menu_utama)/sizeof(char)/20);
         scanf("%d", &pilihan);
 
@@ -514,9 +471,9 @@ void menu(){
                 else G = (int*) buatGraph(&jum_node);
                 break;
             case 2:
+                // pencarian rute terpendek
                 if (G == NULL) teksTengah(" Anda harus membuat graph terlebih dahulu! -", '-', 62, "biasa", 1);
                 else cariRuteTerpendek(G, jum_node, awal);
-                // if (G == NULL) teksTengah(strGanjil(" Anda harus membuat graph terlebih dahulu! "), '-', 62, "biasa", 1);
                 break;
             case 3:
                 // tampilkan graph
@@ -524,31 +481,32 @@ void menu(){
                 else tampilkanGraph(G, jum_node);
                 break;
             case 4:
+                // tambah data
                 if (G == NULL) teksTengah(" Anda harus membuat graph terlebih dahulu! -", '-', 62, "biasa", 1);
                 else G = tambahData(G, &jum_node);
                 break;
             case 5:
+                // hapus data
                 if (G == NULL) teksTengah(" Anda harus membuat graph terlebih dahulu! -", '-', 62, "biasa", 1);
                 else G = hapusData(G, &jum_node);
                 break;
             case 6:
+                // ubah data
                 if (G == NULL) teksTengah(" Anda harus membuat graph terlebih dahulu! -", '-', 62, "biasa", 1);
-                // else teksTengah(" Sedang dalam pengembangan -", '-', 62, "biasa", 1);
                 else ubahData(G, jum_node);
                 break;
             default:
                 printf("--- Input salah! ---\n");
         }
 
+        // menanyakan user apakah ingin kembali ke menu utama
         printf("-? Kembali ke menu utama [y/t]? ");
         scanf("\n%c", &lagi);
     } while (lagi == 'y');
 
     // cetak kalimat penutup
     penutup();
-    
-    
-
+    system("pause");
 }
 
 int main()
