@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#define INF 999
+#define INF 9999999
 
 /*
-    Program ini memanfaatkan konsep graph dua arah dan algoritma dijkstra untuk melakukan pencarian rute terpendek
+    Program ini memanfaatkan konsep undirected graph dua arah dan algoritma dijkstra untuk melakukan pencarian rute terpendek
+    mencari rute terpendek berdasarkan data yang diinputkan.
 
     fitur program :
         1. Buat graf 
@@ -137,7 +138,7 @@ void penutup(){
 void tampilkanGraph(int *graph, int n){
     char temp[20];
     int len_num=0;
-    printf("\n   Represemtasi graf dalam bentuk matriks :");
+    printf("\n   Represemtasi graf dalam bentuk tabel :");
 
     // cari angka terbesar agar lebar tabel disesuaikan
     for (int i = 0; i < n; i++){
@@ -170,7 +171,7 @@ void tampilkanGraph(int *graph, int n){
     }
     printf("\n   ");
     
-    // print graf dalam bentuk matriks
+    // print graf dalam bentuk tabel
     for (int i = 0; i < n; i++){
         for (int j = 0; j < n; j++){
             if (j == 0) {
@@ -200,17 +201,17 @@ void tampilkanGraph(int *graph, int n){
 void cariRuteTerpendek(int* G, int jum_node, int awal){
     int tempGraf[jum_node][jum_node], visit[jum_node], count, jarak[jum_node],temp[jum_node];
 
+    // penentuan node awal dan akhir
     printf("   Masukan node awal : ");
     scanf ("%d",&awal);
     awal--;
+    int akhir;
+    printf("   Masukan node akhir : ");
+    scanf ("%d",&akhir);
+    akhir--;
 
-    // int akhir;
-    // printf("   Masukan node akhir : ");
-    // scanf ("%d",&akhir);
-    // akhir--;
-
-    for(int i=0;i<jum_node;i++)
-    {
+    // set nilai 0 pada node awal dan set nilai tak hingga pada node lain
+    for(int i=0;i<jum_node;i++){
         for (int j=0;j<jum_node;j++)
         {
             if (*(G + jum_node*i + j) == 0)
@@ -222,6 +223,7 @@ void cariRuteTerpendek(int* G, int jum_node, int awal){
             }
         }
     }
+    // tampilkanGraph(tempGraf[0], jum_node);
     for (int i = 0;i<jum_node;i++)
     {
         jarak[i] = tempGraf[awal][i];
@@ -240,6 +242,7 @@ void cariRuteTerpendek(int* G, int jum_node, int awal){
     {
         jarakmin = INF;
         for (int i=0;i<jum_node;i++)
+        // for (int i=0;i<akhir+1;i++)
         {
             //jika jarak lebih kecil dari jarak minimum dan node belum dikunjungi
             // maka jarak minimum adalah jarak yang sudah dibandingkan sebelumnya dengan jarakmin
@@ -253,6 +256,7 @@ void cariRuteTerpendek(int* G, int jum_node, int awal){
         // untuk mengecek node selanjutnya yang terhubung dengan node lain yang memiliki jarak minimum
         visit[nextnode] = 1;
         for(int i = 0;i<jum_node;i++)
+        // for(int i = 0;i<akhir+1;i++)
         {
             if(visit[i]!=1)
             {
@@ -270,10 +274,12 @@ void cariRuteTerpendek(int* G, int jum_node, int awal){
     int rute[jum_node], panjang_rute;
     //nenampilkan jalur dan jarak untuk setiap node
     for (int i = 0, k, j, z=0; i < jum_node ;i++)
+    // for (int i = 0, k, j, z=0; i < akhir+1 ;i++)
     {
         panjang_rute = 0;
         z = 0;
-        if(i!=awal)
+        // if(i!=awal)
+        if(i==akhir)
         {
             printf ("\n   Hasil jarak untuk node ke-%d adalah %d\n",i+1,jarak[i]);
 
@@ -294,12 +300,13 @@ void cariRuteTerpendek(int* G, int jum_node, int awal){
                     printf (" <- ");
                 }
             }
+            break;
         }
     }
     printf("\n");
     
     // cetak footer
-    footer(jarak[jum_node-1], rute, panjang_rute); 
+    footer(jarak[akhir], rute, panjang_rute); 
 }
 
 int* buatGraph(int *jum_node) {
@@ -323,6 +330,7 @@ int* buatGraph(int *jum_node) {
     scanf("%d",jum_node);
     G = (int*) malloc((*jum_node)*(*jum_node)*sizeof(int));
 
+    // user menginputkan bobot antar node
     printf("   Masukkan jarak antar node :\n");
     printf("     Note! Jika tidak ada jarak masukkan 0!\n");
     for (int i = 0; i < (*jum_node); i++){
@@ -340,7 +348,7 @@ int* buatGraph(int *jum_node) {
             if (j == i) *(G + (*jum_node)*i + j) = 0;
             else if (j < i) *(G + (*jum_node)*i + j) = *(G + (*jum_node)*j + i);
             else {
-                printf("   %d <-> %d = ", i+1, j+1);
+                printf("   %d -- %d = ", i+1, j+1);
                 scanf("%d", (G + (*jum_node)*i + j));
                 if (j == (*jum_node)-1) teksTengah("", '-', 62, "biasa", 1);
             }
