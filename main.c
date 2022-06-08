@@ -19,6 +19,7 @@
 */
 
 void teksTengah(char *judul, char token, float len, char* mode, int new_line){
+    /* Fungsi untuk mencetak teks yang di tengah */
     if (mode == "parent" || mode == "run"){
         int len = (int) (len - strlen(judul) - 1) / 2;
         if (mode != "run"){
@@ -88,16 +89,21 @@ void teksTengah(char *judul, char token, float len, char* mode, int new_line){
 }
 
 void header(){
+    /* Fungsi untuk mencetak header */
     printf(" "); teksTengah("", '_', 60, "biasa", 1);
     printf("|"); teksTengah("", ' ', 60, "biasa", 0); printf("|\n");
     printf("|"); teksTengah("/--------------------------------\\", ' ', 60, "biasa", 0); printf("|\n");
     printf("|"); teksTengah("| PROGRAM PENCARIAN RUTE TERPENDEK |", ' ', 60, "biasa", 0); printf("|\n");
     printf("|"); teksTengah("\\--------------------------------/", ' ', 60, "biasa", 0); printf("|\n");
     printf("|"); teksTengah("-- GRAPH IMPLEMENTATION --", ' ', 60, "biasa", 0); printf("|\n");
+    printf("| "); printf("%59s", "Made by : Kelompok 2  ");printf("|\n");
     printf("|"); teksTengah("", '_', 60, "biasa", 0); printf("|\n");
 }
 
 void footer(int jarak_min, int *rute, int n){
+    /* Fungsi untuk mencetak footer yang menampilkan informasi berupa jarak dan rute terpendek
+    digunakan pada saat program menampilkan hasil pada menu 2
+     */
     char temp[20];
     printf(" "); teksTengah("", '_', 60, "biasa", 1);
     printf("|"); teksTengah("", ' ', 60, "biasa", 0); printf("|\n");
@@ -111,8 +117,7 @@ void footer(int jarak_min, int *rute, int n){
 
     // cetak rute terpendek
     char str_rute[50];
-    strcpy(str_rute, "");
-    // printf("%d", rute[n-1]);
+    strcpy(str_rute, ""); // memastikan string kosong
     for (int i = n-1; i >= 0; i--){        
         if (i != 0) sprintf(temp, "%d -> ", rute[i]);
         else sprintf(temp, "%d", rute[i]);
@@ -124,7 +129,7 @@ void footer(int jarak_min, int *rute, int n){
 }
 
 void penutup(){
-
+    /* Fungsi untuk mencetak teks penutup "Terima Kasih" pada saat program sebelum tertutup */
     printf(" "); teksTengah("", '_', 60, "biasa", 1);
     printf("|"); teksTengah("      / \\          / \\      ", ' ', 60, "biasa", 0); printf("|\n"); 
     printf("|"); teksTengah(" _____/___\\________/___\\_____ ", ' ', 60, "biasa", 0); printf("|\n"); 
@@ -136,11 +141,13 @@ void penutup(){
 }
 
 void tampilkanGraph(int *graph, int n){
+    /* Fungsi untuk menampilkan graf */
     char temp[20];
     int len_num=0;
     printf("\n   Represemtasi graf dalam bentuk tabel :");
 
     // cari angka terbesar agar lebar tabel disesuaikan
+    //  hal ini dilakukan agar tampilkan tabel rapi
     for (int i = 0; i < n; i++){
         for (int j = 0; j < n; j++){
             sprintf(temp, "%d", *(graph + i*n + j) );
@@ -150,7 +157,7 @@ void tampilkanGraph(int *graph, int n){
 
     int lebar_node = len_num+2, lebar_nomor;
     sprintf(temp, "%d", n);
-    lebar_nomor = strlen(temp)+3;
+    lebar_nomor = strlen(temp)+3; 
     //  cetak pembatas nomor atas
     printf("\n   ");
     teksTengah("", ' ', lebar_nomor, "biasa", 0);
@@ -160,12 +167,9 @@ void tampilkanGraph(int *graph, int n){
         printf(" ");
     }
     printf("\n   ");
-    // teksTengah("_", '|', lebar_nomor, "pembatas", 0);
     teksTengah("", '-', lebar_nomor-1, "biasa", 0);
     printf("|");
     for (int i = 0; i < n; i++){
-        // sprintf(temp, "%d", i+1);
-        // teksTengah("_", '|', lebar_node+1, "pembatas", 0);
         teksTengah("", '-', lebar_node, "biasa", 0);
         printf("|");
     }
@@ -180,16 +184,13 @@ void tampilkanGraph(int *graph, int n){
             }
             sprintf(temp, "%d", *(graph + i*n + j));
             teksTengah(temp, ' ', lebar_node, "biasa", 0); 
-            // if (strlen(temp) == lebar_node-4) printf("\b");
             printf("|");
         }
         printf("\n   ");
-        // teksTengah("-", '|', lebar_nomor, "pembatas", 0);
         teksTengah("", '-', lebar_nomor-1, "biasa", 0);
         printf("|");
         for (int i = 0; i < n; i++){
             sprintf(temp, "%d", i+1);
-            // teksTengah("-", '|', lebar_node+1, "pembatas", 0);
             teksTengah("", '-', lebar_node, "biasa", 0);
             printf("|");
         }
@@ -199,10 +200,11 @@ void tampilkanGraph(int *graph, int n){
 }
 
 void cariRuteTerpendek(int* G, int jum_node, int awal){
+    /* Fungsi untuk mencari rute terpendek */
     int tempGraf[jum_node][jum_node], visit[jum_node], count, jarak[jum_node],temp[jum_node];
 
     // penentuan node awal dan akhir
-    printf("   Masukan node awal : ");
+    printf("   Masukan node awal  : ");
     scanf ("%d",&awal);
     awal--;
     int akhir;
@@ -223,7 +225,6 @@ void cariRuteTerpendek(int* G, int jum_node, int awal){
             }
         }
     }
-    // tampilkanGraph(tempGraf[0], jum_node);
     for (int i = 0;i<jum_node;i++)
     {
         jarak[i] = tempGraf[awal][i];
@@ -274,11 +275,9 @@ void cariRuteTerpendek(int* G, int jum_node, int awal){
     int rute[jum_node], panjang_rute;
     //nenampilkan jalur dan jarak untuk setiap node
     for (int i = 0, k, j, z=0; i < jum_node ;i++)
-    // for (int i = 0, k, j, z=0; i < akhir+1 ;i++)
     {
         panjang_rute = 0;
         z = 0;
-        // if(i!=awal)
         if(i==akhir)
         {
             printf ("\n   Hasil jarak untuk node ke-%d adalah %d\n",i+1,jarak[i]);
@@ -310,21 +309,8 @@ void cariRuteTerpendek(int* G, int jum_node, int awal){
 }
 
 int* buatGraph(int *jum_node) {
+    /* Fungsi untuk membuat graph */
     int *G;
-    // char *jenis_graph[] = {"Satu arah", "Dua arah"};
-
-    // cetak header
-    // system("cls");
-    // header();
-    // teksTengah(" Buat Graph ", '=', 62, "biasa", 1);
-
-    // for (int i = 0; i < 2; i++){
-    //     printf("-> %d. %s\n", i+1, jenis_graph[i]);
-    // }
-    // printf("-? Masukkan pilihan anda : ");
-    // scanf("%d", &mode_graph);
-    // printf("\n");
-    
     // input user untuk jumlah node
     printf("   Masukan jumlah node : ");
     scanf("%d",jum_node);
@@ -335,16 +321,6 @@ int* buatGraph(int *jum_node) {
     printf("     Note! Jika tidak ada jarak masukkan 0!\n");
     for (int i = 0; i < (*jum_node); i++){
         for (int j = 0; j < (*jum_node); j++){
-            // opsi 1
-            // if (i == j) G[i][j] = 0;
-
-            // opsi 2
-            // if (i == j){
-            //     printf("   %d -> %d = %d\n", i+1, j+1, 0);                
-            //     G[i][j] = 0;
-            //     continue;
-            // }
-
             if (j == i) *(G + (*jum_node)*i + j) = 0;
             else if (j < i) *(G + (*jum_node)*i + j) = *(G + (*jum_node)*j + i);
             else {
@@ -359,6 +335,7 @@ int* buatGraph(int *jum_node) {
 }
 
 void ubahData(int *G, int jum_node){
+    /* Fungsi untuk mengubah data */
     // deklarasi variabel
     int lokasi_data[2], data_baru;
     // menampilkan graph sekarang
@@ -375,6 +352,7 @@ void ubahData(int *G, int jum_node){
 }
 
 int* tambahData(int *G, int *jum_node){
+    /* Fungsi untuk menambahkan data/node pada graf */
     int jum_node_baru, *G_baru;
 
     // input user
@@ -392,7 +370,7 @@ int* tambahData(int *G, int *jum_node){
     }
 
     // memindahkan graph lama ke graph baru
-    //  kemudian meminta input user jika ada node yang belum ada nilainya
+    //  kemudian meminta input user jika ada node yang belum ada bobotnya
     for (int i = 0; i < jum_node_baru; i++){
         for (int j = 0; j < jum_node_baru; j++){
             if (j < *jum_node && i < *jum_node) *(G_baru + jum_node_baru*i + j) = *(G + (*jum_node)*i + j);
@@ -418,6 +396,7 @@ int* tambahData(int *G, int *jum_node){
 }
 
 int* hapusData(int *G, int *jum_node){
+    /* Fungsi untuk menghapus data */
     // deklarasi variabel
     int lokasi_data, *G_baru, jum_node_baru;
 
@@ -452,6 +431,7 @@ int* hapusData(int *G, int *jum_node){
 }
 
 void menu(){
+    /* Fungsi menu utama */
 
     int jum_node, awal, *G = NULL, pilihan;
     char list_menu_utama[][20] = {"Buat graph", "Cari rute terpendek", "Tampilkan graph", "Tambah data", "Hapus data", "Ubah data"}, lagi, inp_hapus_graph;
@@ -504,7 +484,7 @@ void menu(){
                 else ubahData(G, jum_node);
                 break;
             default:
-                printf("--- Input salah! ---\n");
+                teksTengah(" Input Salah! ", '-', 62, "biasa", 1);
         }
 
         // menanyakan user apakah ingin kembali ke menu utama
